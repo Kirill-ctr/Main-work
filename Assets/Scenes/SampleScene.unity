@@ -302,11 +302,12 @@ Transform:
   m_GameObject: {fileID: 789535068}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 320.708, y: 19.893, z: 213.85}
+  m_LocalPosition: {x: 120.83, y: 16.883, z: 312.37}
   m_LocalScale: {x: 0.34593, y: 0.34593, z: 0.34593}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 963194228}
+  - {fileID: 1530695108}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &789535073
@@ -323,6 +324,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
   _speed: 3
   _gravity: -9.8
+  _checkGroundRadius: 0.5
+  _groundChecker: {fileID: 1530695108}
+  _layerMaskGround:
+    serializedVersion: 2
+    m_Bits: 8
+  _jumpHeight: 0.1
+  _sensitivity: 30
 --- !u!143 &789535074
 CharacterController:
   m_ObjectHideFlags: 0
@@ -440,6 +448,37 @@ Transform:
   m_Children: []
   m_Father: {fileID: 789535072}
   m_LocalEulerAnglesHint: {x: 7.272, y: 1.837, z: 0.22}
+--- !u!1 &1530695107
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1530695108}
+  m_Layer: 0
+  m_Name: Ground checker
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1530695108
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1530695107}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -1.005, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 789535072}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1695752117
 GameObject:
   m_ObjectHideFlags: 0
@@ -451,7 +490,7 @@ GameObject:
   - component: {fileID: 1695752120}
   - component: {fileID: 1695752119}
   - component: {fileID: 1695752118}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Terrain
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -546,7 +585,7 @@ GameObject:
   - component: {fileID: 1886342996}
   - component: {fileID: 1886342995}
   - component: {fileID: 1886342994}
-  m_Layer: 0
+  m_Layer: 4
   m_Name: Whater
   m_TagString: Untagged
   m_Icon: {fileID: 0}
