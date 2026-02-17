@@ -7,15 +7,12 @@ public class PlayerController : MonoBehaviour
 {
     [Header("Movement settings")]
     [SerializeField] private float _speed = 3f;
+    [SerializeField] private float _rotationSpeed = 10f;
     [SerializeField] private float _gravity = -9.8f;
     [SerializeField] private float _checkGroundRadius = 0.5f;
     [SerializeField] private Transform _groundChecker;
     [SerializeField] private LayerMask _layerMaskGround;
     [SerializeField] private float _jumpHeight = 0.1f;
-
-    [Header("Sensitivity")]
-    [Range(1, 100)]
-    [SerializeField] private int _sensitivity = 30;
 
     private CharacterController _characterController;
     private Vector3 _moveDirection;
@@ -36,6 +33,7 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         ReadInput();
+        RotateToMovement();
     }
 
     private void FixedUpdate()
@@ -52,6 +50,19 @@ public class PlayerController : MonoBehaviour
     private void Movement(Vector3 direction)
     {
         _characterController.Move(direction * _speed * Time.fixedDeltaTime);
+    }
+
+    private void RotateToMovement()
+    {
+        if(_moveDirection.magnitude > 0.1f)
+        {
+            Quaternion targetRotation = Quaternion.LookRotation(_moveDirection);
+
+            transform.rotation = Quaternion.Slerp(
+                transform.rotation,
+                targetRotation,
+                _rotationSpeed* Time.deltaTime);
+        }
     }
 
     private void Jump()
@@ -81,7 +92,7 @@ public class PlayerController : MonoBehaviour
         if (_moveDirection.magnitude > 0.1f)
         {
             _moveDirection = _moveDirection.normalized;
-            _moveDirection = transform.TransformDirection(_moveDirection);
+            //_moveDirection = transform.TransformDirection(_moveDirection);
         }
     }
 
