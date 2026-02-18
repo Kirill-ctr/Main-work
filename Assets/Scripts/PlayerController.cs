@@ -13,11 +13,13 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Transform _groundChecker;
     [SerializeField] private LayerMask _layerMaskGround;
     [SerializeField] private float _jumpHeight = 0.1f;
+    [SerializeField] private Transform _carryPoint;
 
     private CharacterController _characterController;
     private Vector3 _moveDirection;
     private float _velocity;
     private bool _isGrounded;
+    private PickItUp _currentCarriedItem = null;
 
     private void Awake()
     {
@@ -28,12 +30,25 @@ public class PlayerController : MonoBehaviour
     {
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+
+        if (_carryPoint == null)
+        {
+            GameObject carryPoint = new GameObject("CarryPoint");
+            carryPoint.transform.SetParent(transform);
+            carryPoint.transform.localPosition = new Vector3(0, 0.5f, 1f);
+            _carryPoint = carryPoint.transform;
+        }
     }
 
     private void Update()
     {
         ReadInput();
         RotateToMovement();
+
+        if (Keyboard.current.qKey.isPressed && _currentCarriedItem != null)
+        {
+            DropItem();
+        }
     }
 
     private void FixedUpdate()
@@ -45,6 +60,33 @@ public class PlayerController : MonoBehaviour
 
         Movement(_moveDirection);
         Gravity();
+    }
+
+    public void TryPickupItem(PickItUp item)
+    {
+        if (_currentCarriedItem == null)
+        {
+            _currentCarriedItem = item;
+            item.Pickup(_carryPoint);
+        }
+    }
+
+    private void DropItem()
+    {
+        if (_currentCarriedItem != null)
+        {
+            _currentCarriedItem.Drop();
+            _currentCarriedItem = null;
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Bonfire") && _currentCarriedItem != null)
+        {
+            _currentCarriedItem.DeliverToBonfire();
+            _currentCarriedItem = null;
+        }
     }
 
     private void Movement(Vector3 direction)
