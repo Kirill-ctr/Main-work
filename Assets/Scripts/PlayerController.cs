@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -10,16 +9,16 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float _rotationSpeed = 10f;
     [SerializeField] private float _gravity = -9.8f;
     [SerializeField] private float _checkGroundRadius = 0.5f;
-    [SerializeField] private Transform _groundChecker;
-    [SerializeField] private LayerMask _layerMaskGround;
     [SerializeField] private float _jumpHeight = 0.1f;
+    [SerializeField] private LayerMask _layerMaskGround;
     [SerializeField] private Transform _carryPoint;
+    [SerializeField] private Transform _groundChecker;
 
-    private CharacterController _characterController;
-    private Vector3 _moveDirection;
     private float _velocity;
     private bool _isGrounded;
+    private Vector3 _moveDirection;
     private PickItUp _currentCarriedItem = null;
+    private CharacterController _characterController;
 
     private void Awake()
     {
@@ -44,11 +43,6 @@ public class PlayerController : MonoBehaviour
     {
         ReadInput();
         RotateToMovement();
-
-        if (Keyboard.current.qKey.isPressed && _currentCarriedItem != null)
-        {
-            DropItem();
-        }
     }
 
     private void FixedUpdate()
@@ -134,7 +128,11 @@ public class PlayerController : MonoBehaviour
         if (_moveDirection.magnitude > 0.1f)
         {
             _moveDirection = _moveDirection.normalized;
-            //_moveDirection = transform.TransformDirection(_moveDirection);
+        }
+
+        if (Keyboard.current.qKey.isPressed && _currentCarriedItem != null)
+        {
+            DropItem();
         }
     }
 

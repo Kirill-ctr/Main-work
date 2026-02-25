@@ -15,20 +15,23 @@ public class PickItUp : MonoBehaviour
     private bool _isBeingCarried = false;
     private Transform _carrier;
     private GameObject _activePrompt;
-    private Rigidbody _rb;
-    private Collider _col;
+    private Rigidbody _rigidBody;
+    private Collider _collider;
+
+    private void Awake()
+    {
+        _rigidBody = GetComponent<Rigidbody>();
+        _collider = GetComponent<Collider>();
+    }
 
     private void Start()
     {
-        _rb = GetComponent<Rigidbody>();
-        _col = GetComponent<Collider>();
-
-        if (_rb == null)
+        if (_rigidBody == null)
         {
-            _rb = gameObject.AddComponent<Rigidbody>();
-            _rb.mass = 1f;
-            _rb.linearDamping = 1f;
-            _rb.angularDamping = 1f;
+            _rigidBody = gameObject.AddComponent<Rigidbody>();
+            _rigidBody.mass = 1f;
+            _rigidBody.linearDamping = 1f;
+            _rigidBody.angularDamping = 1f;
         }
     }
 
@@ -45,17 +48,15 @@ public class PickItUp : MonoBehaviour
         if (_isBeingCarried && _carrier != null)
         {
             Vector3 targetPosition = _carrier.position + _carrier.forward * _carryDistance + Vector3.up * _carryHeight;
-            _rb.MovePosition(Vector3.Lerp(transform.position, targetPosition, _smoothSpeed * Time.fixedDeltaTime));
+            _rigidBody.MovePosition(Vector3.Lerp(transform.position, targetPosition, _smoothSpeed * Time.fixedDeltaTime));
 
-            // ������� ������� ��������
             Quaternion targetRotation = Quaternion.LookRotation(_carrier.forward);
-            _rb.MoveRotation(Quaternion.Slerp(_rb.rotation, targetRotation, _smoothSpeed * Time.fixedDeltaTime));
+            _rigidBody.MoveRotation(Quaternion.Slerp(_rigidBody.rotation, targetRotation, _smoothSpeed * Time.fixedDeltaTime));
         }
     }
 
     private void CheckPlayerNearby()
     {
-        // ������� ������
         GameObject player = GameObject.FindGameObjectWithTag("Player");
         if (player == null) return;
 
@@ -66,10 +67,9 @@ public class PickItUp : MonoBehaviour
             if (_activePrompt == null && _pickupPromptPrefab != null)
             {
                 _activePrompt = Instantiate(_pickupPromptPrefab, transform.position + Vector3.up * 0.5f, Quaternion.identity);
-                _activePrompt.transform.SetParent(transform); // ����������� � ��������
+                _activePrompt.transform.SetParent(transform); 
             }
 
-            // ��������� ������� E
             if (Keyboard.current.eKey.isPressed)
             {
                 PlayerController playerController = player.GetComponent<PlayerController>();
@@ -95,11 +95,11 @@ public class PickItUp : MonoBehaviour
         _carrier = carrier;
 
 
-        _rb.useGravity = false;
-        _rb.linearDamping = 5f; 
+        _rigidBody.useGravity = false;
+        _rigidBody.linearDamping = 5f; 
 
-        if (_col != null)
-            _col.enabled = false;
+        if (_collider != null)
+            _collider.enabled = false;
 
         if (_activePrompt != null)
         {
@@ -115,11 +115,11 @@ public class PickItUp : MonoBehaviour
         _isBeingCarried = false;
         _carrier = null;
 
-        _rb.useGravity = true;
-        _rb.linearDamping = 1f;
+        _rigidBody.useGravity = true;
+        _rigidBody.linearDamping = 1f;
 
-        if (_col != null)
-            _col.enabled = true;
+        if (_collider != null)
+            _collider.enabled = true;
 
         Debug.Log($"Предмет {name} Брошен");
     }
