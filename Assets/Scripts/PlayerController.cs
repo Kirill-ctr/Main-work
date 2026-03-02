@@ -19,6 +19,7 @@ public class PlayerController : MonoBehaviour
     private Vector3 _moveDirection;
     private PickItUp _currentCarriedItem = null;
     private CharacterController _characterController;
+    private bool _isAlive = true;
 
     private void Awake()
     {
@@ -54,6 +55,20 @@ public class PlayerController : MonoBehaviour
 
         Movement(_moveDirection);
         Gravity();
+    }
+
+    public bool HasItem()
+    {
+        return _currentCarriedItem != null;
+    }
+
+    public void DeliverItemToBonfire()
+    {
+        if (_currentCarriedItem != null)
+        {
+            _currentCarriedItem.DeliverToBonfire();
+            _currentCarriedItem = null;
+        }
     }
 
     public void TryPickupItem(PickItUp item)

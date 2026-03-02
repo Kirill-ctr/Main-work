@@ -4,9 +4,10 @@ using UnityEngine.UI;
 public class Bon : MonoBehaviour
 {
     [Header("Health settings")]
-    [SerializeField] private float _bonFireHealth = 100f;
+    [SerializeField] private float _bonFireMAXHealth = 100f;
     [SerializeField] private float _healthLosePerSecond = 1f;
     [SerializeField] private float _itemHealAmount = 20f;
+    [SerializeField] private float _currentHealth;
 
     [Header("References")]
     [SerializeField] private Slider _healsBar;
@@ -14,14 +15,48 @@ public class Bon : MonoBehaviour
     [SerializeField] private Light _fireLight;
     [SerializeField] private GameObject _deathScreen;
 
-    [Header("Visual feedback")]
-    [SerializeField] private float _lowHealthThreshold = 30f;
-    [SerializeField] private Color _lowHealthLightColor = Color.red;
-    [SerializeField] private float _minParticleEmission = 10f;
-    [SerializeField] private float _maxParticleEmission = 50f;
-
-    private float _currentHealth;
+    
     private bool _isBurning = true;
     private PlayerController _player;
 
+    private void Start()
+    {
+        _currentHealth = _bonFireMAXHealth;
+        _player = FindAnyObjectByType<PlayerController>();
+    }
+
+    private void Update()
+    {
+        PermanentDamage();
+    }
+
+    private void PermanentDamage()
+    {
+        if (_currentHealth > 0)
+        {
+            _currentHealth -= _healthLosePerSecond * Time.deltaTime;
+        }
+        else
+        {
+            _currentHealth = 0;
+            Debug.Log("Костер потух");
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Player") && _player != null && _player.HasItem())
+        {
+            HealingByItem();
+            _player.DeliverItemToBonfire();
+        }
+    }
+
+    private void HealingByItem()
+    {
+        _currentHealth += _itemHealAmount;
+        _currentHealth = Mathf.Min(_currentHealth, _bonFireMAXHealth);
+
+        Debug.Log($"Костёр полечен! Текущее HP: {_currentHealth}");
+    }
 }
