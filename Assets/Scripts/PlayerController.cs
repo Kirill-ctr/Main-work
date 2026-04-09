@@ -123,27 +123,34 @@ public class PlayerController : MonoBehaviour
 
     private void ReadInput()
     {
+        Transform cameraTransform = Camera.main.transform;
+
         _moveDirection = Vector3.zero;
 
+        Vector3 cameraForward = cameraTransform.forward;
+        Vector3 cameraRight = cameraTransform.right;
+
+        cameraForward.y = 0;
+        cameraRight.y = 0;
+
+        cameraForward.Normalize();
+        cameraRight.Normalize();
+
+        float vertical = 0;
+        float horizontal = 0;
+
         if (Keyboard.current.wKey.isPressed)
-            _moveDirection += new Vector3(0f, 0f, 1f);
-
-        if (Keyboard.current.aKey.isPressed)
-            _moveDirection -= new Vector3(1f, 0f, 0f);
-
+            vertical +=1;
         if (Keyboard.current.sKey.isPressed)
-            _moveDirection -= new Vector3(0f, 0f, 1f);
-
+            vertical -= 1;
         if (Keyboard.current.dKey.isPressed)
-            _moveDirection += new Vector3(1f, 0f, 0f);
-
+            horizontal += 1;
+        if (Keyboard.current.aKey.isPressed)
+            horizontal -= 1;
         if(Keyboard.current.spaceKey.isPressed && _isGrounded)
             Jump();
 
-        if (_moveDirection.magnitude > 0.1f)
-        {
-            _moveDirection = _moveDirection.normalized;
-        }
+        _moveDirection = (cameraForward * vertical + cameraRight * horizontal).normalized;
 
         if (Keyboard.current.qKey.isPressed && _currentCarriedItem != null)
         {
