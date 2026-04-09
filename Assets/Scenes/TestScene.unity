@@ -1184,9 +1184,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ecf1c8de65b09d14a96a04b87a16eb00, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Bon
-  _bonFireHealth: 100
+  _bonFireMAXHealth: 100
   _healthLosePerSecond: 1
   _itemHealAmount: 20
+  _currentHealth: 0
   _healsBar: {fileID: 0}
   _fireParticle: {fileID: 0}
   _fireLight: {fileID: 0}
