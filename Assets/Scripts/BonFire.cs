@@ -21,14 +21,44 @@ public class Bon : MonoBehaviour
 
     private void Start()
     {
+        if (_deathScreen != null)
+        {
+            _deathScreen.SetActive(false);
+        }
+
         _currentHealth = _bonFireMAXHealth;
         _player = FindAnyObjectByType<PlayerController>();
     }
 
     private void Update()
     {
+        if (!_isBurning) return;
+
         PermanentDamage();
         UpdateUI();
+        
+        if(_currentHealth <= 0 && _isBurning)
+        {
+            KillPlayer();
+        }
+    }
+
+    private void KillPlayer()
+    {
+        if(!_isBurning) return;
+
+        _isBurning=false;
+        Debug.Log("Костер потух, конец игры");
+
+        if(_deathScreen != null)
+        {
+            _deathScreen.SetActive(true);
+        }
+
+        if (_player != null)
+            _player.Die();
+
+        Time.timeScale = 0f;
     }
 
     private void UpdateUI()

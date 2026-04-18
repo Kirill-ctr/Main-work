@@ -57,6 +57,13 @@ public class PlayerController : MonoBehaviour
         Gravity();
     }
 
+    public void Die()
+    {
+        Debug.Log("Игрок умер");
+
+        enabled = false;
+    }
+
     public bool HasItem()
     {
         return _currentCarriedItem != null;
