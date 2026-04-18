@@ -28,6 +28,15 @@ public class Bon : MonoBehaviour
     private void Update()
     {
         PermanentDamage();
+        UpdateUI();
+    }
+
+    private void UpdateUI()
+    {
+        if(_healsBar != null)
+        {
+            _healsBar.value = _currentHealth;
+        }
     }
 
     private void PermanentDamage()
