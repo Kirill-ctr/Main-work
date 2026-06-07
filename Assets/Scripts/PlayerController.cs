@@ -10,7 +10,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float _rotationSpeed = 10f;
     [SerializeField] private float _gravity = -9.8f;
     [SerializeField] private float _checkGroundDistans = 0.5f;
-    [SerializeField] private float _jumpHeight = 0.1f;
+    [SerializeField] private float _jumpHeight = 0.3f;
     [SerializeField] private LayerMask _layerMaskGround;
     [SerializeField] private Transform _carryPoint;
     [SerializeField] private Transform _groundChecker;
@@ -156,7 +156,7 @@ public class PlayerController : MonoBehaviour
             horizontal += 1;
         if (Keyboard.current.aKey.isPressed)
             horizontal -= 1;
-        if(Keyboard.current.spaceKey.isPressed && _isGrounded)
+        if(Keyboard.current.spaceKey.wasPressedThisFrame && _isGrounded)
             Jump();
 
         _moveDirection = (cameraForward * vertical + cameraRight * horizontal).normalized;

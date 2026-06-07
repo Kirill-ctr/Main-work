@@ -736,7 +736,7 @@ MonoBehaviour:
   _speed: 3
   _rotationSpeed: 10
   _gravity: -9.8
-  _checkGroundRadius: 0.5
+  _checkGroundDistans: 0.5
   _jumpHeight: 0.1
   _layerMaskGround:
     serializedVersion: 2
