@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.HID;
 
 [RequireComponent(typeof(CharacterController))]
 public class PlayerController : MonoBehaviour
@@ -8,18 +9,19 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float _speed = 3f;
     [SerializeField] private float _rotationSpeed = 10f;
     [SerializeField] private float _gravity = -9.8f;
-    [SerializeField] private float _checkGroundRadius = 0.5f;
+    [SerializeField] private float _checkGroundDistans = 0.5f;
     [SerializeField] private float _jumpHeight = 0.1f;
     [SerializeField] private LayerMask _layerMaskGround;
     [SerializeField] private Transform _carryPoint;
     [SerializeField] private Transform _groundChecker;
 
     private float _velocity;
-    private bool _isGrounded;
+    private bool _isGrounded = false;
     private Vector3 _moveDirection;
     private PickItUp _currentCarriedItem = null;
     private CharacterController _characterController;
     private bool _isAlive = true;
+    RaycastHit hit;
 
     private void Awake()
     {
@@ -170,10 +172,11 @@ public class PlayerController : MonoBehaviour
         _velocity += _gravity * Time.fixedDeltaTime;
         _characterController.Move(Vector3.up * _velocity * Time.fixedDeltaTime);
     }
-
+    
     private bool IsGround()
     {
-        bool result = Physics.CheckSphere(_groundChecker.position, _checkGroundRadius, _layerMaskGround);
+        
+        bool result = Physics.Raycast(transform.position, -transform.up, out hit, _checkGroundDistans);
         return result;
     }
 
