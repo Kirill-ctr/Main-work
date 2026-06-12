@@ -9,7 +9,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float _speed = 3f;
     [SerializeField] private float _rotationSpeed = 10f;
     [SerializeField] private float _gravity = -9.8f;
-    [SerializeField] private float _checkGroundDistans = 0.5f;
+    [SerializeField] private float _checkGroundDistans = 0.3f;
     [SerializeField] private float _jumpHeight = 0.3f;
     [SerializeField] private LayerMask _layerMaskGround;
     [SerializeField] private Transform _carryPoint;
@@ -21,7 +21,6 @@ public class PlayerController : MonoBehaviour
     private PickItUp _currentCarriedItem = null;
     private CharacterController _characterController;
     private bool _isAlive = true;
-    RaycastHit hit;
 
     private void Awake()
     {
@@ -175,8 +174,9 @@ public class PlayerController : MonoBehaviour
     
     private bool IsGround()
     {
-        
+        RaycastHit hit;
         bool result = Physics.Raycast(transform.position, -transform.up, out hit, _checkGroundDistans);
+        Debug.DrawRay(transform.position, -transform.up * _checkGroundDistans, Color.red);
         return result;
     }
 

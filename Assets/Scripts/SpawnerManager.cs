@@ -4,7 +4,7 @@ public class SpawnerManager : MonoBehaviour
 {
     [Header("Spawn Settings")]
     [SerializeField] private GameObject _itemPrefab;
-    [SerializeField] private float _respawnTime = 5f;
+    [SerializeField] private float _respawnTime = 45f;
     [SerializeField] private int _maxItems = 5;
 
     private List<Transform>_spawnPoints = new List<Transform>();
