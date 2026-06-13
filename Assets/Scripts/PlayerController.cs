@@ -20,7 +20,6 @@ public class PlayerController : MonoBehaviour
     private Vector3 _moveDirection;
     private PickItUp _currentCarriedItem = null;
     private CharacterController _characterController;
-    private bool _isAlive = true;
 
     private void Awake()
     {

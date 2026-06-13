@@ -11,11 +11,11 @@ public class Bon : MonoBehaviour
 
     [Header("References")]
     [SerializeField] private Slider _healsBar;
-    [SerializeField] private ParticleSystem _fireParticle;
-    [SerializeField] private Light _fireLight;
     [SerializeField] private GameObject _deathScreen;
 
-    
+    [Header("Dynamic Fire")]
+    [SerializeField] private ParticleFireSystem _dynamicFire;
+
     private bool _isBurning = true;
     private PlayerController _player;
 
@@ -32,14 +32,19 @@ public class Bon : MonoBehaviour
 
     private void Update()
     {
-        if (!_isBurning) return;
-
         PermanentDamage();
         UpdateUI();
-        
+
+        if (!_isBurning) return; 
         if(_currentHealth <= 0 && _isBurning)
         {
             KillPlayer();
+        }
+
+        float normalizedHealth = _currentHealth / _bonFireMAXHealth;
+        if (_dynamicFire != null)
+        {
+            _dynamicFire.SetIntensity(normalizedHealth);
         }
     }
 
