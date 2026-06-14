@@ -46,6 +46,12 @@ public class Bon : MonoBehaviour
         {
             _dynamicFire.SetIntensity(normalizedHealth);
         }
+
+        float normalizedSize = _currentHealth / _bonFireMAXHealth;
+        if (_dynamicFire != null)
+        {
+            _dynamicFire.UpdateParticlesByHealth(normalizedSize);
+        }
     }
 
     private void KillPlayer()
