@@ -1,15 +1,14 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.HID;
 
 [RequireComponent(typeof(CharacterController))]
 public class PlayerController : MonoBehaviour
 {
     [Header("Movement settings")]
-    [SerializeField] private float _speed = 3f;
+    [SerializeField] private float _speed = 5f;
     [SerializeField] private float _rotationSpeed = 10f;
     [SerializeField] private float _gravity = -9.8f;
-    [SerializeField] private float _checkGroundDistans = 0.3f;
+    [SerializeField] private float _checkGroundDistans = 0.2f;
     [SerializeField] private float _jumpHeight = 0.3f;
     [SerializeField] private LayerMask _layerMaskGround;
     [SerializeField] private Transform _carryPoint;
@@ -62,6 +61,8 @@ public class PlayerController : MonoBehaviour
         Debug.Log("Игрок умер");
 
         enabled = false;
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
     }
 
     public bool HasItem()
@@ -179,4 +180,17 @@ public class PlayerController : MonoBehaviour
         return result;
     }
 
+    public void PlayerUpgrade(int deliveredItems)
+    {
+        if (_speed <= 20)
+        {
+            _speed += 1.5f;
+        }
+
+        if (_jumpHeight <= 2)
+        {
+            _jumpHeight += 0.2f;
+        }
+
+    }
 }

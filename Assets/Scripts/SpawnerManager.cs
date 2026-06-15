@@ -1,15 +1,19 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System.Collections;
+using Unity.VisualScripting;
+using JetBrains.Annotations;
 public class SpawnerManager : MonoBehaviour
 {
     [Header("Spawn Settings")]
     [SerializeField] private GameObject _itemPrefab;
-    [SerializeField] private float _respawnTime = 45f;
     [SerializeField] private int _maxItems = 5;
 
     private List<Transform>_spawnPoints = new List<Transform>();
     private List<GameObject> _activeItems = new List<GameObject>();
     private List<bool> _isPointEmpty = new List<bool>();
+
+    private bool _waveIsActive;
 
     private void Start()
     {
@@ -26,6 +30,14 @@ public class SpawnerManager : MonoBehaviour
         {
             SpawnItem(i);
         }
+
+        StartCoroutine(RespawnWave());
+    }
+
+    public int GetRemainingItemsCount()
+    {
+        _activeItems.RemoveAll(item => item == null);
+        return _activeItems.Count;
     }
 
     private void SpawnItem(int pointIndex)
@@ -37,17 +49,40 @@ public class SpawnerManager : MonoBehaviour
         _isPointEmpty[pointIndex] = false;
 
         var itemScript = newItem.GetComponent<PickItUp>();
-        if (itemScript != null) 
+        
+    }
+
+    private void RespawnItems()
+    {
+        foreach (GameObject item in _activeItems)
         {
-            StartCoroutine(WaitForItemDelivery(newItem, pointIndex));
+            if (item != null)
+                Destroy(item);
+        }
+
+        _activeItems.Clear();
+
+        for (int i = 0; i < _isPointEmpty.Count; i++)
+        {
+            _isPointEmpty[i] = false;
+        }
+
+        for (int i = 0; i < _maxItems && i < _spawnPoints.Count; i++)
+        {
+            SpawnItem(i);
+        }
+    } 
+
+    private IEnumerator RespawnWave()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(40f);
+            _waveIsActive = false;
+            RespawnItems();
+            _waveIsActive = true;
         }
     }
 
-    private System.Collections.IEnumerator WaitForItemDelivery (GameObject item, int pointIndex)
-    {
-        yield return new WaitUntil(() => item == null);
-        yield return new WaitForSeconds(_respawnTime);
-
-        SpawnItem(pointIndex);
-    } 
+    public bool IsWaveActive() => _waveIsActive;
 }
